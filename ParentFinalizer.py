@@ -27,8 +27,8 @@ def EXE():
     ops.object.mode_set(mode="OBJECT")  
 
     #armature object gets selected    
-    armatureObject = scene.objects.active 
-    
+    armatureObject = context.view_layer.objects.active
+
     #armature data
     armature = armatureObject.data
 
@@ -41,7 +41,7 @@ def EXE():
         bone = target.parent_bone
         
         #create a vertex group of a child object to match its bone parent
-        new_vertex_group = target.vertex_groups.new( bone )
+        new_vertex_group = target.vertex_groups.new( name = bone )
                 
         verts = []
         mesh = target.data
@@ -68,9 +68,9 @@ def EXE():
             target.modifiers.remove(m)
                 
         #blender will select all the pieces 
-        context.scene.objects.active = target
+        #context.scene.objects.active = target
+        context.view_layer.objects.active = target
         ops.object.parent_clear(type='CLEAR')
-        
         
         #remember the pieces
         temporary.append(target)
@@ -84,6 +84,7 @@ def EXE():
     
     #every selected pieces will be joined into 1 mesh
     ops.object.join(ctx)
+    
 
     mesh = armatureObject.children[0]   #the active object will be the parent of all selected object
     mesh.select = True
